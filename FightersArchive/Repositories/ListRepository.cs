@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 
 namespace FightersArchive.Repositories
 {
-    public class GenericRepository<T> where T: class, IEntity, new()
-       
+    public class ListRepository<T> : IRepository<T> where T: class, IEntity, new()      
     {
         protected readonly List<T> _items = new();
 
+        public IEnumerable<T> GetAll()
+        { 
+            return _items.ToList(); 
+        }
         public void Add(T item)
         {
              item.Id = _items.Count + 1;
@@ -20,10 +23,6 @@ namespace FightersArchive.Repositories
 
         public void Save()
         {
-            foreach (var item in _items)
-            {
-                Console.WriteLine(item);
-            }
 
         }
 
@@ -31,11 +30,10 @@ namespace FightersArchive.Repositories
         {
             return _items.Single(x => x.Id == id);
         }
+
         public void Remove(T item)
         {
             _items.Remove(item);
-
-
         }
 
     }
