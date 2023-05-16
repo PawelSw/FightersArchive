@@ -19,6 +19,7 @@ namespace FightersArchive.Repositories
         public IEnumerable<T> GetAll() 
         {
             return _dbSet.ToList();
+
         }
         public void Add(T item)
         {
@@ -38,5 +39,12 @@ namespace FightersArchive.Repositories
             _dbContext.SaveChanges();
         }
 
+        public void Display()
+        {
+            foreach (var item in _dbSet) 
+            {
+                Console.WriteLine(item);
+            }
+        }
     }
 }

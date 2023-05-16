@@ -31,9 +31,13 @@ internal class Program
         var sqlRepository = new SqlRepository<Fighter>(new FightersArchiveDbContext());
         Fighter Holy = new Fighter { FirstName = "Evander", LastName = "Holyfield", Wins = 55, Lost = 12, Weight = 104, Active = false };
         sqlRepository.Add(Holy);
+        Fighter TommyGun = new Fighter { FirstName = "Tommy", LastName = "Morrison", Wins = 44, Lost = 12, Weight = 114, Active = false };
+        sqlRepository.Add(TommyGun);
+        Fighter Anthony = new Fighter { FirstName = "Anthony", LastName = "Joshua", Wins = 30, Lost = 2, Weight = 125, Active = true };
+        sqlRepository.Add(Anthony);
         sqlRepository.Save();
-        var fighterToDisplay = sqlRepository.GetById(1);
-        Console.WriteLine(fighterToDisplay);
+        sqlRepository.Display();
+  
 
 
     }

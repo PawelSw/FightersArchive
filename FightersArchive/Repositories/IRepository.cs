@@ -8,13 +8,16 @@ using System.Threading.Tasks;
 
 namespace FightersArchive.Repositories
 {
-    public interface IRepository<T> where T : class, IEntity
+    public interface IRepository<T> : IWriteRepository<T>, IReadRepository<T> where T : class, IEntity
     {
-        IEnumerable<T> GetAll();
-        void Add(T item);
-        T GetById(int id);
-        void Remove(T item);
-        void Save();
+        //IEnumerable<T> GetAll();
+        //void Add(T item);
+        //T GetById(int id);
+        //void Remove(T item);
+        //void Save();
+        //void Display();
+
+
 
     }
 }

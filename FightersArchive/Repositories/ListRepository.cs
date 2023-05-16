@@ -1,4 +1,5 @@
 ﻿using FightersArchive.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,13 @@ namespace FightersArchive.Repositories
             _items.Remove(item);
         }
 
+        public void Display()
+        {
+            foreach (var item in _items)
+            {
+                Console.WriteLine(item);
+            }
+        }
     }
 }
 
