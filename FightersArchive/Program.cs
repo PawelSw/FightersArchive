@@ -1,11 +1,27 @@
-﻿using FightersArchive.Data;
+﻿
+using FightersArchive;
+using FightersArchive.Components.DataProviders;
 using FightersArchive.Entities;
 using FightersArchive.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 
-internal class Program
-{
-    private static void Main(string[] args)
-    {
+var services = new ServiceCollection();
+services.AddSingleton<IApp,App>();
+services.AddSingleton<IRepository<Fighter>, ListRepository<Fighter>>();
+services.AddSingleton<IFighterProvider, FighterProviderBasic>();
+
+var serviceProvider = services.BuildServiceProvider();
+var app = serviceProvider.GetService<IApp>()!;
+app.Run();
+ 
+//using FightersArchive.Data;
+//using FightersArchive.Entities;
+//using FightersArchive.Repositories;
+
+//internal class Program
+//{
+//    private static void Main(string[] args)
+//    {
         //var repository = new GenericRepository<Fighter>();
         //repository.Add(new Fighter { FirstName = "Mike", LastName = "Tyson", Wins = 50, Lost = 8, Weight = 105, Active = false });
         //repository.Add(new Fighter {  FirstName = "Lennox", LastName = "Lewis", Wins = 44, Lost = 2, Weight = 115, Active = false });
@@ -28,17 +44,17 @@ internal class Program
         //genericRepoWithRemove.Add(Anthony);
         //genericRepoWithRemove.Save();
 
-        var sqlRepository = new SqlRepository<Fighter>(new FightersArchiveDbContext());
-        Fighter Holy = new Fighter { FirstName = "Evander", LastName = "Holyfield", Wins = 55, Lost = 12, Weight = 104, Active = false };
-        sqlRepository.Add(Holy);
-        Fighter TommyGun = new Fighter { FirstName = "Tommy", LastName = "Morrison", Wins = 44, Lost = 12, Weight = 114, Active = false };
-        sqlRepository.Add(TommyGun);
-        Fighter Anthony = new Fighter { FirstName = "Anthony", LastName = "Joshua", Wins = 30, Lost = 2, Weight = 125, Active = true };
-        sqlRepository.Add(Anthony);
-        sqlRepository.Save();
-        sqlRepository.Display();
+        //var sqlRepository = new SqlRepository<Fighter>(new FightersArchiveDbContext());
+        //Fighter Holy = new Fighter { FirstName = "Evander", LastName = "Holyfield", Wins = 55, Lost = 12, Weight = 104, Active = false };
+        //sqlRepository.Add(Holy);
+        //Fighter TommyGun = new Fighter { FirstName = "Tommy", LastName = "Morrison", Wins = 44, Lost = 12, Weight = 114, Active = false };
+        //sqlRepository.Add(TommyGun);
+        //Fighter Anthony = new Fighter { FirstName = "Anthony", LastName = "Joshua", Wins = 30, Lost = 2, Weight = 125, Active = true };
+        //sqlRepository.Add(Anthony);
+        //sqlRepository.Save();
+        //sqlRepository.Display();
   
 
 
-    }
-}
+//    }
+//}
