@@ -11,12 +11,13 @@ namespace FightersArchive.Data
 {
     public class FightersArchiveDbContext : DbContext
     {
-        public DbSet<Fighter> Fighters => Set<Fighter>();
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public FightersArchiveDbContext(DbContextOptions<FightersArchiveDbContext> options)
+            : base(options)
         {
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseInMemoryDatabase("FightersArchiveDb");
+            
         }
+        public DbSet<Fighter> Fighters { get; set; }
+
+
     }
 }

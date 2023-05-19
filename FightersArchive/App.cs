@@ -1,5 +1,6 @@
 ﻿using FightersArchive.Components.CsvReader;
 using FightersArchive.Components.DataProviders;
+using FightersArchive.Data;
 using FightersArchive.Data.Entities;
 using FightersArchive.Data.Repositories;
 
@@ -11,12 +12,16 @@ namespace FightersArchive
         private readonly IRepository<Fighter> _repository;
         private readonly IFighterProvider _fighterProvider;
         private readonly ICsvReader _csvReader;
+        private readonly FightersArchiveDbContext _dbContext;
 
-        public App(IRepository<Fighter> repository, IFighterProvider fighterProvider, ICsvReader csvReader)
+        public App(IRepository<Fighter> repository, IFighterProvider fighterProvider, ICsvReader csvReader,
+            FightersArchiveDbContext dbContext)
         {
             _repository = repository;
             _fighterProvider = fighterProvider;
             _csvReader = csvReader;
+            _dbContext = dbContext;
+            _dbContext.Database.EnsureCreated();
         }
         public static List<Fighter> GenerateSampleFighters()
         {
@@ -38,47 +43,55 @@ namespace FightersArchive
         }
         public void InsertDataFromCsvToDatabase()
         {
-            var cars = _csvReader.ProcessFighters("Resources\\Files\\boxers.csv");
+            var fighters = _csvReader.ProcessFighters("Resources\\Files\\boxers.csv");
 
-            foreach (var car in cars)
+            foreach (var fighter in fighters)
             {
-                _repository.Add(new Data.Entities.Fighter()
+                _dbContext.Add(new Data.Entities.Fighter()
                 {
-                    FirstName = car.FirstName,
-                    LastName = car.LastName,
-                    Wins = car.Wins,
-                    Lost = car.Lost,
-                    Weight = car.Weight,
-                    Active = car.Active,
+                    FirstName = fighter.FirstName,
+                    LastName = fighter.LastName,
+                    Wins = fighter.Wins,
+                    Lost = fighter.Lost,
+                    Weight = fighter.Weight,
+                    Active = fighter.Active,
                 });
             }
 
+            _dbContext.SaveChanges();
+        }
+
+        public void DisplayAllFighters()
+        {
+            var allFighters = _dbContext.Fighters.ToList();
+            foreach (var fighter in allFighters)
+                Console.WriteLine(fighter);
         }
 
         public void Run()
         {
-            var fightersFromCsv = _csvReader.ProcessFighters("Resources\\Files\\boxers.csv");
-            InsertDataFromCsvToDatabase();
+
+            //InsertDataFromCsvToDatabase();
 
       
             //var allfighters = GenerateSampleFighters();
             //AddFighters(allfighters);
             Console.WriteLine("All fighters:");
-            _fighterProvider.DisplayAllFighters();
-            Console.WriteLine("Inactive fighters:");
-            _fighterProvider.DisplayInActiveFighters();
-            Console.WriteLine("Active fighters:");
-            _fighterProvider.DisplayActiveFighters();
-            Console.WriteLine("Most wins fighter:");
-            _fighterProvider.DisplayMostWinsFighter();
-            Console.WriteLine("Most losts fighter:");
-            _fighterProvider.DisplayMostLosesFighter();
-            Console.WriteLine("Heavyweight fighters:");
-            _fighterProvider.DisplayHeavyWeightFigters();
-            Console.WriteLine("Lightweight fighters:");
-            _fighterProvider.DisplayLightWeightFigters();
-            Console.WriteLine("Fighters with firstname starts with R:");
-            _fighterProvider.DisplayFightersStartsWithMLetter("R");
+            DisplayAllFighters();
+            //Console.WriteLine("Inactive fighters:");
+            //_fighterProvider.DisplayInActiveFighters();
+            //Console.WriteLine("Active fighters:");
+            //_fighterProvider.DisplayActiveFighters();
+            //Console.WriteLine("Most wins fighter:");
+            //_fighterProvider.DisplayMostWinsFighter();
+            //Console.WriteLine("Most losts fighter:");
+            //_fighterProvider.DisplayMostLosesFighter();
+            //Console.WriteLine("Heavyweight fighters:");
+            //_fighterProvider.DisplayHeavyWeightFigters();
+            //Console.WriteLine("Lightweight fighters:");
+            //_fighterProvider.DisplayLightWeightFigters();
+            //Console.WriteLine("Fighters with firstname starts with R:");
+            //_fighterProvider.DisplayFightersStartsWithMLetter("R");
         }
 
 
