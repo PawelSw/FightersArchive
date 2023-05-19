@@ -1,4 +1,4 @@
-﻿namespace FightersArchive.Entities
+﻿namespace FightersArchive.Data.Entities
 {
     public abstract class EntityBase : IEntity
     {

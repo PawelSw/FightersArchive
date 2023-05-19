@@ -1,7 +1,7 @@
-﻿using FightersArchive.Entities;
+﻿using FightersArchive.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace FightersArchive.Repositories
+namespace FightersArchive.Data.Repositories
 {
     public class SqlRepository<T> : IRepository<T> where T : class, IEntity
     {
@@ -16,7 +16,7 @@ namespace FightersArchive.Repositories
 
         }
 
-        public IEnumerable<T> GetAll() 
+        public IEnumerable<T> GetAll()
         {
             return _dbSet.ToList();
 
@@ -41,7 +41,7 @@ namespace FightersArchive.Repositories
 
         public void Display()
         {
-            foreach (var item in _dbSet) 
+            foreach (var item in _dbSet)
             {
                 Console.WriteLine(item);
             }

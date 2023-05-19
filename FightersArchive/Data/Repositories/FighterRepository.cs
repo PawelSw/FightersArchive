@@ -1,6 +1,6 @@
-﻿using FightersArchive.Entities;
+﻿using FightersArchive.Data.Entities;
 
-namespace FightersArchive.Repositories
+namespace FightersArchive.Data.Repositories
 {
     public class FighterRepository
     {
@@ -12,16 +12,16 @@ namespace FightersArchive.Repositories
             _fighters.Add(fighter);
         }
 
-        public void Save() 
+        public void Save()
         {
-            foreach(var fighter in _fighters)
+            foreach (var fighter in _fighters)
             {
                 Console.WriteLine(fighter);
             }
-        
+
         }
 
-        public Fighter GetById(int id) 
+        public Fighter GetById(int id)
         {
             return _fighters.Single(x => x.Id == id);
         }

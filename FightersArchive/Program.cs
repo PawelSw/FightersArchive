@@ -1,14 +1,16 @@
 ﻿
 using FightersArchive;
+using FightersArchive.Components.CsvReader;
 using FightersArchive.Components.DataProviders;
-using FightersArchive.Entities;
-using FightersArchive.Repositories;
+using FightersArchive.Data.Entities;
+using FightersArchive.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
 var services = new ServiceCollection();
 services.AddSingleton<IApp,App>();
 services.AddSingleton<IRepository<Fighter>, ListRepository<Fighter>>();
-services.AddSingleton<IFighterProvider, FighterProviderBasic>();
+services.AddSingleton<IFighterProvider, FighterProvider>();
+services.AddSingleton<ICsvReader, CsvReader>();
 
 var serviceProvider = services.BuildServiceProvider();
 var app = serviceProvider.GetService<IApp>()!;

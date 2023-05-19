@@ -12,4 +12,14 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\Files\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\Files\boxers.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

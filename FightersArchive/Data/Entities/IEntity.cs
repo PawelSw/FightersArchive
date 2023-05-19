@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FightersArchive.Entities
+namespace FightersArchive.Data.Entities
 {
     public interface IEntity
     {

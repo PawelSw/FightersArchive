@@ -1,4 +1,4 @@
-﻿using FightersArchive.Entities;
+﻿using FightersArchive.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

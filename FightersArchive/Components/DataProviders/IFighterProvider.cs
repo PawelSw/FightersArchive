@@ -1,19 +1,16 @@
-﻿using FightersArchive.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FightersArchive.Components.DataProviders
+﻿namespace FightersArchive.Components.DataProviders
 {
     public interface IFighterProvider
     {
-        List<Fighter> ActiveFighters();
-        List<Fighter> InActiveFighters();
-
+  
+        void DisplayAllFighters();
         void DisplayInActiveFighters();
         void DisplayActiveFighters();
+        void DisplayMostWinsFighter();
+        void DisplayMostLosesFighter();
+        void DisplayHeavyWeightFigters();
+        void DisplayLightWeightFigters();
+        void DisplayFightersStartsWithMLetter(string prefix);
 
 
     }

@@ -1,5 +1,5 @@
-﻿using FightersArchive.Entities;
-using FightersArchive.Repositories;
+﻿using FightersArchive.Data.Entities;
+using FightersArchive.Data.Repositories;
 
 
 namespace FightersArchive.Components.DataProviders
@@ -73,6 +73,39 @@ namespace FightersArchive.Components.DataProviders
                 Console.WriteLine(fighter);
         }
 
+        public void DisplayAllFighters()
+        {
+            throw new NotImplementedException();
+        }
 
+        public void DisplayMostWinsFighter()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisplayMostLosesFighter()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisplayHeavyWeightFigters()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisplayLightWeightFigters()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisplayFightersStartsWithMLetter()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisplayFightersStartsWithMLetter(string prefix)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
