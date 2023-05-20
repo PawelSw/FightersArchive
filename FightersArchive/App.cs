@@ -3,6 +3,7 @@ using FightersArchive.Components.DataProviders;
 using FightersArchive.Data;
 using FightersArchive.Data.Entities;
 using FightersArchive.Data.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace FightersArchive
@@ -67,33 +68,208 @@ namespace FightersArchive
             foreach (var fighter in allFighters)
                 Console.WriteLine(fighter);
         }
+        private void DisplayMostWinsFighter()
+        {
+            var mostWinFighter = _dbContext.Fighters.OrderBy(x => x.Wins).Last();
+            Console.WriteLine("Most wins fighter:");
+            Console.WriteLine(mostWinFighter);
+        }
+        private void DisplayHeavyWeightFigters()
+        {
+            var heavyWeightFighters = _dbContext.Fighters.Where(x => x.Weight >= 100);
+            Console.WriteLine("Heavyweight fighters:");
+
+            foreach (var heavyWeighFighter in heavyWeightFighters)
+            {
+                Console.WriteLine(heavyWeighFighter);
+            }
+        }
+        private void DisplayLightWeightFigters()
+        {
+            var lightWeightFighters = _dbContext.Fighters.Where(x => x.Weight <= 60);
+            Console.WriteLine("Lightweight fighters:");
+
+            foreach (var lightWeighFighter in lightWeightFighters)
+            {
+                Console.WriteLine(lightWeighFighter);
+            }
+        }
+        private void DisplayMostLostsFighter()
+        {
+            var mostLostFighter = _dbContext.Fighters.OrderBy(x => x.Lost).Last();
+            Console.WriteLine("Most losts fighter:");
+            Console.WriteLine(mostLostFighter);
+        }
+        private void DisplayActiveFighters()
+        {
+            var activeFighters = _dbContext.Fighters.Where(x => x.Active == true).ToList();
+            Console.WriteLine("Active fighters:");
+
+            foreach (var activeFighter in activeFighters)
+            {
+                Console.WriteLine(activeFighter);
+            }
+        }
+        private void DisplayInactiveFighters()
+        {
+            var inactiveFighters = _dbContext.Fighters.Where(x => x.Active == false).ToList();
+            Console.WriteLine("Inactive fighters:");
+
+            foreach (var inactiveFighter in inactiveFighters)
+            {
+                Console.WriteLine(inactiveFighter);
+            }
+        }
+        private Fighter? ReadFirst(string name)
+        {
+            return _dbContext.Fighters.FirstOrDefault(x => x.FirstName == name);
+
+        }
+        private void DeleteChosenFighter()
+        {
+            Console.WriteLine("Type the name of the fighter to delete:");
+            var inputUser = Console.ReadLine();
+            var fighterChosen = this.ReadFirst(inputUser);
+
+            try
+            {
+                _dbContext.Fighters.Remove(fighterChosen);
+                _dbContext.SaveChanges();
+                Console.WriteLine("Fighter deleted succesfully.");
+            }
+            catch
+            {
+                Console.WriteLine("The name does not exist, try again.");
+            }
+        }
+        private void UpdateNameOfChosenFighter()
+        {
+            Console.WriteLine("Type the name of the fighter to update:");
+            var inputUser = Console.ReadLine();
+            var fighterChosen = this.ReadFirst(inputUser);
+            Console.WriteLine(fighterChosen);
+            Console.WriteLine("Type new name of chosen fighter to update:");
+            var newName = Console.ReadLine();
+            fighterChosen.FirstName = newName;
+            _dbContext.SaveChanges();
+            Console.WriteLine($"Name was updated successfully to: {fighterChosen.FirstName}.");
+        }
+
+        private void CreateNewFighter()
+        {
+            Console.WriteLine("Type the Firstname of the new fighter:");
+            var newFighter = new Fighter();
+            var newFirstName = Console.ReadLine();
+            newFighter.FirstName = newFirstName;
+            _dbContext.Add(newFighter);
+
+            Console.WriteLine("Type the Lastname of the new fighter:");
+            var newLastName = Console.ReadLine();
+            newFighter.LastName = newLastName;
+            _dbContext.Add(newFighter);
+
+            Console.WriteLine("Type the number of wins:");
+            var wins = Console.ReadLine();
+            int winsfromstring = int.Parse(wins);
+            newFighter.Wins = winsfromstring;
+            _dbContext.Add(newFighter);
+
+            Console.WriteLine("Type the number of loses:");
+            var loses = Console.ReadLine();
+            int losesfromstring = int.Parse(loses);
+            newFighter.Lost = losesfromstring;
+            _dbContext.Add(newFighter);
+
+            Console.WriteLine("Type the weight:");
+            var weight = Console.ReadLine();
+            int weightfromstring = int.Parse(weight);
+            newFighter.Weight = weightfromstring;
+            _dbContext.Add(newFighter);
+
+            Console.WriteLine("Type the True or False for active status:");
+            var actOrNot = Console.ReadLine();
+            bool actOrNotfromString = bool.Parse(actOrNot);
+            newFighter.Active = actOrNotfromString;
+            _dbContext.Add(newFighter);
+
+            _dbContext.SaveChanges();
+            Console.WriteLine($"Fighter : {newFighter.FirstName} {newFighter.LastName} was added successfully!");
+        }
 
         public void Run()
         {
-
             //InsertDataFromCsvToDatabase();
+            bool CloseApp = false;
 
-      
-            //var allfighters = GenerateSampleFighters();
-            //AddFighters(allfighters);
-            Console.WriteLine("All fighters:");
-            DisplayAllFighters();
-            //Console.WriteLine("Inactive fighters:");
-            //_fighterProvider.DisplayInActiveFighters();
-            //Console.WriteLine("Active fighters:");
-            //_fighterProvider.DisplayActiveFighters();
-            //Console.WriteLine("Most wins fighter:");
-            //_fighterProvider.DisplayMostWinsFighter();
-            //Console.WriteLine("Most losts fighter:");
-            //_fighterProvider.DisplayMostLosesFighter();
-            //Console.WriteLine("Heavyweight fighters:");
-            //_fighterProvider.DisplayHeavyWeightFigters();
-            //Console.WriteLine("Lightweight fighters:");
-            //_fighterProvider.DisplayLightWeightFigters();
-            //Console.WriteLine("Fighters with firstname starts with R:");
-            //_fighterProvider.DisplayFightersStartsWithMLetter("R");
+            while (!CloseApp)
+            {
+                Console.WriteLine(
+                    "|-----------Menu------------|\n" +
+                    "1 - Display all fighters\n" +
+                    "2 - Display most wins fighter\n" +
+                    "3 - Display HeavyWeight fighters\n" +
+                    "4 - Display LightWeight fighters\n" +
+                    "5 - Display most losts fighter\n" +
+                    "6 - Delete the chosen Fighter\n" +
+                    "7 - Update the name of chosen fighter\n" +
+                    "8 - Display active fighters\n" +
+                    "9 - Display inactive fighters\n" +
+                    "10 - Create new fighter\n" +
+                    "X - Close app\n");
+
+                var userInput = Console.ReadLine().ToUpper();
+
+                switch (userInput)
+                {
+                    case "1":
+                        DisplayAllFighters();
+                        break;
+
+                    case "2":
+                        DisplayMostWinsFighter();
+                        break;
+
+                    case "3":
+                        DisplayHeavyWeightFigters();
+                        break;
+
+                    case "4":
+                        DisplayLightWeightFigters();
+                        break;
+
+                    case "5":
+                        DisplayMostLostsFighter();
+                        break;
+
+                    case "6":
+                        DeleteChosenFighter();
+                        break;
+
+                    case "7":
+                        UpdateNameOfChosenFighter();
+                        break;
+
+                    case "8":
+                        DisplayActiveFighters();
+                        break;
+
+                    case "9":
+                        DisplayInactiveFighters();
+                        break;
+
+                    case "10":
+                        CreateNewFighter();
+                        break;
+
+                    case "X":
+                        CloseApp = true;
+                        break;
+
+                    default:
+                        System.Console.WriteLine("Invalid operation.\n");
+                        continue;
+                }
+            }
         }
-
-
     }
 }
