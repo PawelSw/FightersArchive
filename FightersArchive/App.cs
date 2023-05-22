@@ -4,7 +4,7 @@ using FightersArchive.Data;
 using FightersArchive.Data.Entities;
 using FightersArchive.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace FightersArchive
 {
@@ -123,8 +123,8 @@ namespace FightersArchive
         private Fighter? ReadFirst(string name)
         {
             return _dbContext.Fighters.FirstOrDefault(x => x.FirstName == name);
-
         }
+
         private void DeleteChosenFighter()
         {
             Console.WriteLine("Type the name of the fighter to delete:");
@@ -144,55 +144,182 @@ namespace FightersArchive
         }
         private void UpdateNameOfChosenFighter()
         {
+            var updatedFighter = new Fighter();
             Console.WriteLine("Type the name of the fighter to update:");
-            var inputUser = Console.ReadLine();
-            var fighterChosen = this.ReadFirst(inputUser);
-            Console.WriteLine(fighterChosen);
-            Console.WriteLine("Type new name of chosen fighter to update:");
-            var newName = Console.ReadLine();
-            fighterChosen.FirstName = newName;
-            _dbContext.SaveChanges();
-            Console.WriteLine($"Name was updated successfully to: {fighterChosen.FirstName}.");
+            string inputUser = Console.ReadLine();
+            if (inputUser.Length > 0)
+            {
+
+                updatedFighter = this.ReadFirst(inputUser);
+                if(updatedFighter == null) 
+                {
+                    Console.WriteLine("Fighter does not exist, try again.");
+                }
+                else
+                {
+                    Console.WriteLine(updatedFighter);
+                    Console.WriteLine("Type new name of chosen fighter to update:");
+                    var newName = Console.ReadLine();
+                    updatedFighter.FirstName = newName;
+                    _dbContext.SaveChanges();
+                    Console.WriteLine($"Name was updated successfully to: {updatedFighter.FirstName}.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Name can not be empty.");
+            }
         }
 
         private void CreateNewFighter()
         {
             Console.WriteLine("Type the Firstname of the new fighter:");
             var newFighter = new Fighter();
-            var newFirstName = Console.ReadLine();
-            newFighter.FirstName = newFirstName;
-            _dbContext.Add(newFighter);
+        goBackToFirstName:
+            string newFirstName = Console.ReadLine();
+
+            while (true)
+            {
+
+                if (newFirstName.Length <= 0)
+                {
+                    Console.WriteLine("Field Firstname can not be empty,try again.");
+                    goto goBackToFirstName;
+
+                }
+                else
+                {
+                    newFighter.FirstName = newFirstName;
+                    _dbContext.Add(newFighter);
+                    break;
+                }
+            }
+
+
 
             Console.WriteLine("Type the Lastname of the new fighter:");
-            var newLastName = Console.ReadLine();
-            newFighter.LastName = newLastName;
-            _dbContext.Add(newFighter);
+        goBackToLastName:
+            string newLastName = Console.ReadLine();
 
-            Console.WriteLine("Type the number of wins:");
-            var wins = Console.ReadLine();
-            int winsfromstring = int.Parse(wins);
-            newFighter.Wins = winsfromstring;
-            _dbContext.Add(newFighter);
+            while (true)
+            {
+                if (newLastName.Length <= 0)
+                {
+                    Console.WriteLine("Field LastName can not be empty,try again.");
+                    goto goBackToLastName;
+                }
+                else
+                {
+                    newFighter.LastName = newLastName;
+                    _dbContext.Add(newFighter);
+                    break;
+                }
+            }
 
-            Console.WriteLine("Type the number of loses:");
-            var loses = Console.ReadLine();
-            int losesfromstring = int.Parse(loses);
-            newFighter.Lost = losesfromstring;
-            _dbContext.Add(newFighter);
 
-            Console.WriteLine("Type the weight:");
-            var weight = Console.ReadLine();
-            int weightfromstring = int.Parse(weight);
-            newFighter.Weight = weightfromstring;
-            _dbContext.Add(newFighter);
+            while (true)
+            {
+                Console.WriteLine("Type the number of wins:");
+                var wins = Console.ReadLine();
 
-            Console.WriteLine("Type the True or False for active status:");
-            var actOrNot = Console.ReadLine();
-            bool actOrNotfromString = bool.Parse(actOrNot);
-            newFighter.Active = actOrNotfromString;
-            _dbContext.Add(newFighter);
+                try
+                {
+                    int winsfromstring = int.Parse(wins);
+                    if (winsfromstring >= 0)
+                    {
+                        newFighter.Wins = winsfromstring;
+                        _dbContext.Add(newFighter);
+                        break;
+                    }
 
-            _dbContext.SaveChanges();
+                    else
+                    {
+                        Console.WriteLine("Number of wins must be greater or equal 0.");
+                    };
+                }
+
+                catch (Exception)
+                {
+                    Console.WriteLine("Number of wins must be a digit.");
+                }
+            }
+
+            while (true)
+            {
+                Console.WriteLine("Type the number of loses:");
+                var loses = Console.ReadLine();
+
+                try
+                {
+
+                    int losesfromstring = int.Parse(loses);
+                    if (losesfromstring >= 0)
+                    {
+                        newFighter.Lost = losesfromstring;
+                        _dbContext.Add(newFighter);
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Number of loses must be greater or equal 0.");
+                    };
+                }
+
+                catch
+                {
+                    Console.WriteLine("Number of loses must be a digit.");
+                }
+
+            }
+
+            while (true)
+            {
+                Console.WriteLine("Type the weight:");
+                var weight = Console.ReadLine();
+
+                try
+                {
+
+                    int weightFromString = int.Parse(weight);
+                    if (weightFromString >= 0)
+                    {
+                        newFighter.Lost = weightFromString;
+                        _dbContext.Add(newFighter);
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Weight must be greater then 0.");
+                    };
+                }
+
+                catch (Exception)
+                {
+                    Console.WriteLine("Weight must be a digit.");
+                }
+
+            }
+            while (true)
+            {
+                Console.WriteLine("Type the True or False for active status:");
+                var status = Console.ReadLine();
+
+                try
+                {
+                    bool statusfromString = bool.Parse(status);
+                    newFighter.Active = statusfromString;
+                    _dbContext.Add(newFighter);
+                    _dbContext.SaveChanges();
+                    break;
+                }
+
+                catch (Exception)
+                {
+                    Console.WriteLine("Please type only True or False for status.");
+                }
+
+            }
+
             Console.WriteLine($"Fighter : {newFighter.FirstName} {newFighter.LastName} was added successfully!");
         }
 

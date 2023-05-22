@@ -8,7 +8,7 @@ namespace FightersArchive.Data.Entities
 {
     public class Fighter : EntityBase
     {
-        public string FirstName { get; set; }
+        public string ? FirstName { get; set; }
 
         public string LastName { get; set; }
 
